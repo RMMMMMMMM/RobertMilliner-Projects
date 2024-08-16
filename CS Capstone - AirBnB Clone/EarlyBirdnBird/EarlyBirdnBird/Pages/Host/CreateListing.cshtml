@@ -1,0 +1,179 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Host.CreateListingModel
+@{
+	ViewData["Title"] = "Create Listing";
+}
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        CREATE LISTING
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Name" class="control-label">Rental Name</label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Address" class="control-label"></label>
+                <input asp-for="Input.Address" class="form-control" />
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.City" class="control-label"></label>
+                <input asp-for="Input.City" class="form-control" />
+                <span asp-validation-for="Input.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.State" class="control-label"></label>
+                <input asp-for="Input.State" class="form-control" />
+                <span asp-validation-for="Input.State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Zip" class="control-label"></label>
+                <input asp-for="Input.Zip" class="form-control" />
+                <span asp-validation-for="Input.Zip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Description" class="control-label"></label>
+                <input asp-for="Input.Description" class="form-control" />
+                <span asp-validation-for="Input.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.RentalType" class="control-label"></label>
+                <input asp-for="Input.RentalType" class="form-control" />
+                <span asp-validation-for="Input.RentalType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.MaxOcupants" class="control-label"></label>
+                <input asp-for="Input.MaxOcupants" class="form-control" />
+                <span asp-validation-for="Input.MaxOcupants" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Bathrooms" class="control-label"></label>
+                <input asp-for="Input.Bathrooms" class="form-control" />
+                <span asp-validation-for="Input.Bathrooms" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Beds" class="control-label"></label>
+                <input asp-for="Input.Beds" class="form-control" />
+                <span asp-validation-for="Input.Beds" class="text-danger"></span>
+            </div>
+            <div id="imageInputs">
+                <div class="form-group">
+                    <label asp-for="Input.ImageFile" class="control-label">Image File</label>
+                    <input asp-for="Input.ImageFile" type="file" id="uploadBox" name="files" class="form-control" required />
+                    <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" id="addImageBtn" class="btn btn-primary">Add Another Image</button>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.HotTub" /> @Html.DisplayNameFor(model => model.Input.HotTub)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.BigTV" /> @Html.DisplayNameFor(model => model.Input.BigTV)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.NES" /> @Html.DisplayNameFor(model => model.Input.NES)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.WiFi" /> @Html.DisplayNameFor(model => model.Input.WiFi)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.SwimmingPool" /> @Html.DisplayNameFor(model => model.Input.SwimmingPool)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.Gym" /> @Html.DisplayNameFor(model => model.Input.Gym)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.Parking" /> @Html.DisplayNameFor(model => model.Input.Parking)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.AirConditioning" /> @Html.DisplayNameFor(model => model.Input.AirConditioning)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.PetFriendly" /> @Html.DisplayNameFor(model => model.Input.PetFriendly)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.LaundryFacilities" /> @Html.DisplayNameFor(model => model.Input.LaundryFacilities)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.Balcony" /> @Html.DisplayNameFor(model => model.Input.Balcony)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Input.Fireplace" /> @Html.DisplayNameFor(model => model.Input.Fireplace)
+                </label>
+            </div>
+@*  ZACK ADDITION STARTS *@
+            <div class="form-group">
+                <label asp-for="PriceInput.PricePerNight" class="control-label">Price Per Night</label>
+                <input asp-for="PriceInput.PricePerNight" class="form-control" />
+                <span asp-validation-for="PriceInput.PricePerNight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceInput.PriceDateStart" class="control-label">Start Date</label>
+                <input asp-for="PriceInput.PriceDateStart" class="form-control" />
+                <span asp-validation-for="PriceInput.PriceDateStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceInput.PriceDateEnd" class="control-label">End Date</label>
+                <input asp-for="PriceInput.PriceDateEnd" class="form-control" />
+                <span asp-validation-for="PriceInput.PriceDateEnd" class="text-danger"></span>
+            </div>
+
+@*  ZACK ADDITION ENDS *@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        // Function to add a new file input for selecting images
+        function addImageInput() {
+            var imageInputs = document.getElementById('imageInputs');
+            var newInput = document.createElement('div');
+            newInput.className = 'form-group';
+            newInput.innerHTML = `
+                <label class="control-label">Image File</label>
+                <input type="file" name="files" class="form-control" required />
+            `;
+            imageInputs.appendChild(newInput);
+        }
+
+        // Event listener for the "Add Another Image" button
+        document.getElementById('addImageBtn').addEventListener('click', function () {
+            addImageInput();
+        });
+    </script>
+}

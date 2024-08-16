@@ -1,0 +1,116 @@
+﻿@page
+@using Infrastructure.Models
+@model EarlyBirdnBird.Pages.RentalDetailsModel
+@{
+}
+
+<div class="row">
+	<!--Images will populate here-->
+    @foreach(var rental in Model.Rentals)
+    {
+        <!-- Main image carousel -->
+        <div id="carousel-@rental.Id" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (var image in rental.Images)
+                {
+                    <!-- Sets active image based on primary flag -->
+                    <div class="carousel-item @(image.PrimaryImage == true ? "active" : "")">
+                        <img src="@image.RentalImage" class="d-block w-100" alt="Rental Image">
+                    </div>
+                }
+            </div>
+            <!-- Carousel controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@rental.Id" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@rental.Id" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <!-- Thumbnails -->
+        <div class="row mt-2">
+            @foreach (var image in rental.Images)
+            {
+                <div class="col-3">
+                    <img src="@image.RentalImage" class="img-thumbnail thumbnail-img" alt="Thumbnail" onclick="selectImage(this)">
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<div class="row">
+	<!--Rental info-->
+	<div class="col">
+        @foreach (var rental in Model.Rentals)
+		{
+            <div class="card">
+                <h5 class="card-header">@rental.Name</h5>
+                <div class="card-body">
+                    <p class="card-text">@rental.Description</p>
+                    <p class="card-text"><strong>Address:</strong> @rental.Address, @rental.City, @rental.State, @rental.Zip</p>
+                    <p class="card-text"><strong>Max Occupants:</strong> @rental.MaxOcupants</p>
+                    <p class="card-text"><strong>Beds:</strong> @rental.Beds</p>
+                    <p class="card-text"><strong>Bathrooms:</strong> @rental.Bathrooms</p>
+                    @if (rental.Prices != null)
+                    {
+                        @foreach (var price in rental.Prices)
+                        {
+                            <p class="card-text"><strong>Price:</strong> $@price.PricePerNight/night</p>
+                        }
+                    }
+                    @if (rental.RentalAmenities != null && rental.RentalAmenities.Any())
+                    {
+                        <p class="card-text"><strong>Amenities:</strong></p>
+                        <ul>
+                            @foreach (var amenity in rental.RentalAmenities)
+                            {
+                                <li>@amenity.Amenity.Name</li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+		}
+	</div>
+	<!--Booking-->
+	<div class="col">
+        <div class="card">
+            <h5 class="card-header">Book</h5>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <strong><label asp-for="Input.StartTime" class="form-label"></label></strong>
+                        <input asp-for="Input.StartTime" class="form-control" />
+                        <span asp-validation-for="Input.StartTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="Input.EndTime" class="form-label"></label></strong>
+                        <input asp-for="Input.EndTime" class="form-control" />
+                        <span asp-validation-for="Input.EndTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <strong><label asp-for="Input.Guests" class="form-label"></label></strong>
+                        <input asp-for="Input.Guests" class="form-control" />
+                        <span asp-validation-for="Input.Guests" class="text-danger"></span>
+                    </div>
+                    <p class="card-text"><strong>Tax:</strong> $10</p>
+                    </br>
+                    <div class="form-group">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="submit" class="btn btn-primary">Book</button>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" href="/Identity/Account/Login?returnUrl=@Url.Page("/RentalDetails", new { id = Model.Rentals.FirstOrDefault()?.Id })">Login to Book</a>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+	</div>
+</div>

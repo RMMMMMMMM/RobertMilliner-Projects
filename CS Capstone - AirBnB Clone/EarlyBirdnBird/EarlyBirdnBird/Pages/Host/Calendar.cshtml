@@ -1,0 +1,87 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Host.CalendarModel
+@{
+    ViewData["Title"] = "Your Calendar";
+}
+
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.css' rel='stylesheet' />
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js'></script>
+
+<style>
+    #toggleButton {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<button id="toggleButton">List View</button>
+
+<div id="reservationsList" style="display: none;">
+    @if (Model.ReservationsWithRentals != null)
+    {
+        <h3>Reservations:</h3>
+        <ul>
+            @foreach (var reservationWithRental in Model.ReservationsWithRentals)
+            {
+                <li>
+                    Rental: @reservationWithRental.Rental.Name -
+                    @reservationWithRental.Reservation.BookedStart.ToString() to
+                    @reservationWithRental.Reservation.BookedEnd.ToString()
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No reservations found.</p>
+    }
+</div>
+
+<div id='calendar'></div>
+
+@{
+    // had to preprocess the list for the calendar for some reason
+    var events = new List<object>();
+    if (Model.ReservationsWithRentals != null)
+    {
+        foreach (var reservationWithRental in Model.ReservationsWithRentals)
+        {
+            events.Add(new
+            {
+                title = $"Rental: {reservationWithRental.Rental.Name}",
+                start = reservationWithRental.Reservation.BookedStart,
+                end = reservationWithRental.Reservation.BookedEnd
+            });
+        }
+    }
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: @Html.Raw(Json.Serialize(events))
+            });
+        calendar.render();
+
+        var toggleButton = document.getElementById('toggleButton');
+        var reservationsList = document.getElementById('reservationsList');
+
+        toggleButton.addEventListener('click', function () {
+            if (reservationsList.style.display === 'none') {
+                reservationsList.style.display = 'block';
+                calendarEl.style.display = 'none';
+            } else {
+                reservationsList.style.display = 'none';
+                calendarEl.style.display = 'block';
+            }
+        });
+    });
+</script>

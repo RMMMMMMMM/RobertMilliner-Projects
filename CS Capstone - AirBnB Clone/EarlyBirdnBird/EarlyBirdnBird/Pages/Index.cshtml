@@ -1,0 +1,158 @@
+﻿@page
+@using Infrastructure.Models
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<section id="filter-section" class="filter-form-section mt-4">
+    <h2>Find Your Perfect Spot</h2>
+    <!--place search bar-->
+    <form class="form-control">
+        <div class="flex-row m-2">
+            <label class="mx-2">Start Date:</label>
+            <input type="date" class="form-control mx-2" asp-for="StartDate" />
+
+            <label class="mx-2">End Date:</label>
+            <input type="date" class="form-control mx-2" asp-for="EndDate" />
+        </div>
+        
+        <div class="flex-row m-2">
+            <select asp-items="Model.Bathrooms" asp-for="BathroomSearch" class="btn btn-primary dropdown-toggle mx-2">
+                <option value="">Bathrooms</option>
+            </select>
+
+            <select asp-items="Model.Beds" asp-for="bedSearch" class="btn btn-primary dropdown-toggle mx-2">
+                <option value="">Beds</option>
+            </select>
+
+            <select asp-items="Model.Occupants" asp-for="OccupantSearch" class="btn btn-primary dropdown-toggle mx-2">
+                <option value="">Occupants</option>
+            </select>
+
+            <select asp-items="Model.Locations" asp-for="LocationSearch" class="btn btn-primary dropdown-toggle mx-2">
+                <option value="">City</option>
+            </select>
+
+            <select asp-items="Model.State" asp-for="StateSearch" class="btn btn-primary dropdown-toggle mx-2">
+                <option value="">State</option>
+            </select>
+
+            <select asp-items="Model.Amenities" asp-for="AmenitySearch" class="btn btn-primary dropdown-toggle mx-2">
+                <option value="">Amenities</option>
+            </select>
+        </div>
+        <div class="flex-row m-2">
+            <input class="form-control me-sm-2 m-2" type="search" placeholder="Search" asp-for="SearchString">
+            <button class="btn btn-secondary me-sm-2 m-2" type="submit">Search</button>
+
+            <a href="@Url.Page("./Index")" class="btn btn-secondary me-sm-2 mx-2">Clear Filters</a>
+        </div>
+    </form>
+</section>
+<section id="listings" class="mt-4">
+    <h2>Available Listings</h2>
+    <div class="row">
+        @foreach (var rental in Model.Rentals)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    @if (rental.Images != null && rental.Images.Any())
+                    {
+                        <img src="@rental.Images.FirstOrDefault(i => i.PrimaryImage==true)?.RentalImage" loading="lazy" class="card-img-top" alt="Rental Images" style="height: 200px; width: 100%; object-fit: cover;" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@rental.Name</h5>
+                        <p class="card-text">@rental.Description</p>
+                        <p class="card-text"><strong>Address:</strong> @rental.Address, @rental.City, @rental.State, @rental.Zip</p>
+                        <p class="card-text"><strong>Max Occupants:</strong> @rental.MaxOcupants</p>
+                        <p class="card-text"><strong>Beds:</strong> @rental.Beds</p>
+                        <p class="card-text"><strong>Bathrooms:</strong> @rental.Bathrooms</p>
+                        @if (rental.Prices != null)
+                        {
+                            @foreach (var price in rental.Prices)
+                            {
+                                <p class="card-text"><strong>Price:</strong> $@price.PricePerNight/night</p>
+                            }
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Owned by @rental.OwnerName</small>
+                        <a asp-page="./RentalDetails" class="btn btn-primary" asp-route-id="@rental.Id">Details</a>
+
+                        @* <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-@rental.Id">View Details</button> *@
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="modal fade" id="modal-@rental.Id" tabindex="-1" role="dialog" aria-labelledby="rentalModalLabel-@rental.Id" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="rentalModalLabel-@rental.Id">@rental.Name</h5>
+        </div>
+        <div class="modal-body">
+        <!-- Main image carousel -->
+        <div id="carousel-@rental.Id" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+        @foreach (var image in rental.Images)
+        {
+        <!-- Sets active imaged based on primary flag -->
+        <div class="carousel-item @(image.PrimaryImage == true ? "active" : "")">
+        <img src="@image.RentalImage" class="d-block w-100" alt="Rental Image">
+        </div>
+        }
+        </div>
+        <!-- Carousel controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@rental.Id" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel-@rental.Id" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+        </button>
+        </div>
+        <!-- Thumbnails -->
+        <div class="row mt-2">
+        @foreach (var image in rental.Images)
+        {
+        <div class="col-3">
+        <img src="@image.RentalImage" class="img-thumbnail" alt="Thumbnail">
+        </div>
+        }
+        </div>
+        <p>@rental.Description</p>
+        <p><strong>Address:</strong> @rental.Address, @rental.City, @rental.State, @rental.Zip</p>
+        <p><strong>Max Occupants:</strong> @rental.MaxOcupants</p>
+        <p><strong>Beds:</strong> @rental.Beds</p>
+        <p><strong>Bathrooms:</strong> @rental.Bathrooms</p>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Book this listing</button>
+        </div>
+        </div>
+        </div>
+        </div> *@
+        }
+    </div>
+
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" href="?currentPage=@(Model.CurrentPage - 1)">Previous</a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="?currentPage=@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" href="?currentPage=@(Model.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+</section>
+

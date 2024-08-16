@@ -1,0 +1,34 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.carousel-item img {
+    max-height: 600px; /* Set maximum height for the main images */
+    width: 100%; /* Ensure images fill the carousel container */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+}
+
+.thumbnail-img {
+    max-height: 100px; /* Set maximum height for thumbnails */
+    width: 100%; /* Ensure thumbnails fill the container */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+}

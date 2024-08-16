@@ -1,0 +1,97 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Host.ListingsModel
+@{
+    ViewData["Title"] = "Your Listings";
+}
+
+<section id="listings" class="mt-4">
+    <h2>YOUR Listings</h2>
+    <div class="row">
+        @foreach (var rental in Model.Rentals)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    @if (rental.Images != null && rental.Images.Any())
+                    {
+                        <img src="@rental.Images.FirstOrDefault(i => i.PrimaryImage==true)?.RentalImage" class="card-img-top" alt="Rental Images" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@rental.Name</h5>
+                        <p class="card-text">@rental.Description</p>
+                        <p class="card-text"><strong>Address:</strong> @rental.Address, @rental.City, @rental.State, @rental.Zip</p>
+                        <p class="card-text"><strong>Max Occupants:</strong> @rental.MaxOcupants</p>
+                        <p class="card-text"><strong>Beds:</strong> @rental.Beds</p>
+                        <p class="card-text"><strong>Bathrooms:</strong> @rental.Bathrooms</p>
+                        @if (rental.Prices != null)
+                        {
+                            @foreach (var price in rental.Prices)
+                            {
+                                <p class="card-text"><strong>Price:</strong> $@price.PricePerNight/night</p>
+                            }
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Owned by @rental.OwnerName</small>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-@rental.Id">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modal-@rental.Id" tabindex="-1" role="dialog" aria-labelledby="rentalModalLabel-@rental.Id" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rentalModalLabel-@rental.Id">@rental.Name</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <!-- Main image carousel -->
+                            <div id="carousel-@rental.Id" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @foreach (var image in rental.Images)
+                                    {
+                                        <!-- Sets active imaged based on primary flag -->
+                                        <div class="carousel-item @(image.PrimaryImage == true ? "active" : "")">
+                                            <img src="@image.RentalImage" class="d-block w-100" alt="Rental Image">
+                                        </div>
+                                    }
+                                </div>
+                                <!-- Carousel controls -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@rental.Id" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-@rental.Id" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            <!-- Thumbnails -->
+                            <div class="row mt-2">
+                                @foreach (var image in rental.Images)
+                                {
+                                    <div class="col-3">
+                                        <img src="@image.RentalImage" class="img-thumbnail" alt="Thumbnail">
+                                    </div>
+                                }
+                            </div>
+                            <p>@rental.Description</p>
+                            <p><strong>Address:</strong> @rental.Address, @rental.City, @rental.State, @rental.Zip</p>
+                            <p><strong>Max Occupants:</strong> @rental.MaxOcupants</p>
+                            <p><strong>Beds:</strong> @rental.Beds</p>
+                            <p><strong>Bathrooms:</strong> @rental.Bathrooms</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            <a href="/Host/UpdateListing?rentalID=@rental.Id" class="btn btn-primary">Edit</a>
+
+                            @* <button type="button" class="btn btn-primary">DELETE</button> *@
+                            <a href="/Host/DeleteListing?rentalID=@rental.Id" class="btn btn-primary">DELETE</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

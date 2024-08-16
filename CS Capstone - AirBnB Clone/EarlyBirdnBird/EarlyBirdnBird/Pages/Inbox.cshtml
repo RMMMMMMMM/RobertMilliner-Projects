@@ -1,0 +1,25 @@
+﻿@page
+@model InboxModel
+@{
+    ViewData["Title"] = "Your Inbox";
+}
+
+<section id="inbox" class="container mt-4">
+    <h1 class="display-4">Inbox</h1>
+    <a asp-page="/SendMessage" class="btn btn-primary">Send Message</a>
+    <div class="messages-container mt-3">
+        @foreach (var usermail in Model.UserMail)
+        {
+            <div class="message card mb-3">
+                <div class="card-header">
+                    <h2 class="h5">@usermail.fromUser</h2>  @* the problem child *@
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">@usermail.subject</h3>
+                    <p class="card-text">@usermail.body</p>
+                    <p class="message-date text-muted">@usermail.DateSent</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

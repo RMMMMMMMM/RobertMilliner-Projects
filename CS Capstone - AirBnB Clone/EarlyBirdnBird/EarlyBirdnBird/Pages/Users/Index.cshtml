@@ -1,0 +1,116 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Users.IndexModel
+@{
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-md-4">
+            <h2 class="text-primary">User List</h2>
+        </div>
+        <div class="col-md-8 d-flex justify-content-end">
+
+            <form method="get" class="form-inline">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="EmailSearch" placeholder="Search by email" value="@Model.EmailSearch" />
+                    <select class="form-control ml-2" name="RoleFilter">
+                        <option value="">Select Role</option>
+                        <option value="@Utility.SD.AdminRole">Admin</option>
+                        <option value="@Utility.SD.HostRole">Host</option>
+                        <option value="@Utility.SD.CustomerRole">Customer</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+            <a href="@Url.Page("/Users/Index")" class="btn btn-secondary ml-2">Clear Filters</a>
+            <a asp-page="/Account/Register" asp-area="Identity" class="btn btn-primary ml-2"><i class="fas fa-plus"></i> &nbsp; Create New</a>
+        </div>
+    </div>
+</div>
+@*     <p class="hidden" id="success">@Model.Success.ToString()</p>
+    <p class="hidden" id="message">@Model.Message</p> *@
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">E-Mail</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Role(s)</th>
+                    <th scope="col">Lock/Unlock</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.ApplicationUsers)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var role in Model.UserRoles[user.Id])
+                                {
+                                    <li>@role</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <form method="post" class="mb-0">
+                                <button type="submit" class="btn btn-sm btn-outline-warning" asp-page-handler="lockUnlock" asp-route-id="@user.Id">
+                                    <i class="fas fa-lock@(user.LockoutEnd > DateTime.Now ? "-open" : "")"></i> @(user.LockoutEnd > DateTime.Now ? "Unlock" : "Lock")
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-sm btn-outline-success" asp-page="Update" asp-route-id="@user.Id">Update</a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@user.Id" style="display: inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this user?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="User pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Page("/Users/Index", new { CurrentPage = Model.CurrentPage - 1, EmailSearch = Model.EmailSearch, RoleFilter = Model.RoleFilter })">Previous</a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Page("/Users/Index", new { CurrentPage = i, EmailSearch = Model.EmailSearch, RoleFilter = Model.RoleFilter })">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" href="@Url.Page("/Users/Index", new { CurrentPage = Model.CurrentPage + 1, EmailSearch = Model.EmailSearch, RoleFilter = Model.RoleFilter })">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+@section Scripts{
+    <script>
+        function alertFunc() {
+            var success = $("#success").html()
+            var message = $("#message").html();
+            console.log(success);
+            console.log(message);
+            if (success == "True") {
+                toastr.success(message);
+            };
+
+        }
+        window.onload = alertFunc();
+    </script>
+}

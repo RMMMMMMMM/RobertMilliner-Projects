@@ -1,0 +1,15 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Host.DeleteListingModel
+@{
+    ViewData["Title"] = "UPDATE Listing";
+}
+<div class="row">
+    <div class="col-md-4">
+        DELETE LISTING: ---- @Model.rentalNAME ----
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="submit" value="DELETE" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

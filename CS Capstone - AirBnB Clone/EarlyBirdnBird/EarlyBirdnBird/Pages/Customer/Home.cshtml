@@ -1,0 +1,46 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Customer.HomeModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+
+<section id="search-trips" class="container mt-4">
+    <a asp-page="/Index" class="btn btn-primary">Book Now</a>
+</section>
+
+<section id="reservations" class="container mt-4">
+    <h1 class="display-4">Upcoming Reservations</h1>
+    <div class="reservation-list mt-3">
+        @foreach (var reservation in Model.Reservations)
+        {
+            @if(reservation.Status != 3)
+            {
+                <form method="post">
+                    <div class="reservation card mb-3">
+                        <div class="card-header">
+                            @reservation.Rental
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Guests: @reservation.Guests</p>
+                            <p class="card-text">Date Start: @reservation.BookedStart</p>
+                            <p class="card-text">Date Start: @reservation.BookedEnd</p>
+                        </div>
+                        <input type="submit" value="Cancel" asp-route-id="@reservation.Id" class="btn btn-primary" />
+                        <a asp-page="./ReviewSubmit" asp-route-id="@reservation.Id">Review</a>
+                    </div>
+                </form>
+            }
+        }
+        
+        @* <div class="reservation card mb-3">
+            <div class="card-header">
+                Reservation #2
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">New York Apartment</h2>
+                <p class="card-text">Date: 2024-03-15 to 2024-03-20</p>
+            </div>
+        </div> *@
+    </div>
+</section>

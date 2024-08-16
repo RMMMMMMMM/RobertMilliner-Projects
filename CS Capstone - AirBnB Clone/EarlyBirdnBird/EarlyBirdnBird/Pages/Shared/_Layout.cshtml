@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EarlyBirdnBird</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EarlyBirdnBird.styles.css" asp-append-version="true" />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar')
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth'
+            })
+            calendar.render()
+        })
+
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">EarlyBirdnBird</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.IsInRole(Utility.SD.AdminRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #222222 !important">Admin</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="" asp-page="/Users/Index">Users</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Roles/Index">Roles</a>
+                                </div>
+                            </li>
+                        }
+                        @if (User.IsInRole(Utility.SD.HostRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #222222 !important">Host</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="" asp-page="/Host/HostSummary">Today's Summary</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Host/Calendar">Calendar</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Host/Listings">Listings</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Host/CreateListing">Create Listing</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Inbox">Inbox</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Host/Reviews">Reviews</a>
+                                </div>
+                            </li>
+                        }
+                        @if (User.IsInRole(Utility.SD.CustomerRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #222222 !important">Customer</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="" asp-page="/Customer/Home">Home</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Index">Book a Trip</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Inbox">Inbox</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <a class="nav-link text-dark" asp-page="/About">About</a>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - EarlyBirdnBird - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/1e3u4x300rnwd6tsbw5jfd9ve5tvb04qwvf6pkqqpupjgouj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://kit.fontawesome.com/04792fcb58.js" crossorigin="anonymous"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

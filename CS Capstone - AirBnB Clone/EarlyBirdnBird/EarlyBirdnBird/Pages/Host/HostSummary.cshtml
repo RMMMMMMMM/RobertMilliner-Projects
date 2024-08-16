@@ -1,0 +1,55 @@
+﻿@page
+@model EarlyBirdnBird.Pages.HostSummaryModel
+@{
+    ViewData["Title"] = "Today - Hosting Dashboard";
+}
+
+<!--need to handle that only a host can be logged in and view this-->
+<section id="today-summary" class="container mt-5">
+    <h1 class="mb-4">Today's Summary - Host Dashboard</h1>
+    @if (Model.Reservations != null && Model.Reservations.Any())
+    {
+        <div class="row">
+            @foreach (var reservation in Model.Reservations)
+            {
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h2>Reservation</h2>
+                        </div>
+                        <div class="card-body">
+@*                             <p><strong>Listing:</strong> @reservation.Rental.Name</p> *@
+                            <p><strong>Guest:</strong> @(reservation.AppUser?.FName ?? "Unknown ") @(reservation.AppUser?.LName ?? "Unknown")</p>  <!-- Won't show name unless ASPNetUser ID matches AppUserID in Reservations- Zack' -->
+                            <p><strong>Check-in:</strong> @reservation.BookedStart?.ToString("dddd, MMMM dd, h:mm tt, yyyy")</p>
+                            <p><strong>Days reserved:</strong> @((reservation.BookedEnd - reservation.BookedStart)?.TotalDays.ToString("N0")) Days</p>
+                            <hr>
+                            <h2>Pricing Details</h2>
+                            <p><strong>Average Price per Night:</strong> $@reservation.IndividualTotal</p>
+                            @* <p><strong>Cleaning Fee:</strong> $20</p> *@
+                            <p><strong>Total Price for Booking:</strong> $@reservation.GrandTotal</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+        </div>
+    }
+    else
+    {
+        <p>No reservations today.</p>
+    }
+</section>
+
+<section id="weekly-earning-summary" class="container">
+    <h1 class="mb-4">Earnings Summary</h1> <!--Weekly Earnings Summary-->
+    <div class="card">
+        <div class="card-header">
+            <h2>Projected Earnings</h2> <!--This Week's Earnings-->
+        </div>
+        <div class="card-body">
+            <p><strong>Total Earnings:</strong> $@Model.TotalEarnings</p>
+            <p><strong>Total Bookings:</strong> @Model.TotalBookings</p>
+            <p><strong>Average Earnings per Booking:</strong> $@Model.AverageEarningsPerBooking</p>
+        </div>
+    </div>
+</section>

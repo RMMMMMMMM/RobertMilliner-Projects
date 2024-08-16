@@ -1,0 +1,50 @@
+﻿@page
+@model EarlyBirdnBird.Pages.Host.ReviewsModel
+@{
+    ViewData["Title"] = "Your Reviews";
+}
+<section id="reviews" class="container mt-4">
+    <h1 class="display-4">Listing Reviews</h1>
+    <div class="reviews-container mt-3">
+        @foreach (var review in Model.Reviews)
+        {
+            <div class="review card mb-3">
+                <div class="card-header">
+                    <h2 class="h5">@review.Reviewer.UserName</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Review for: @review.Rental.Name</h3>
+                    <p class="card-text">Comment: "@review.body"</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@* 
+<section id="reviews" class="container mt-4">
+    <h1 class="display-4">Listing Reviews</h1>
+    <div class="reviews-container mt-3">
+        <div class="review card mb-3">
+            <div class="card-header">
+                <h2 class="h5">John Doe</h2>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">Review for: Weber's Getaway Resort</h3>
+                <p class="card-text">Rating: 4/5</p>
+                <p class="card-text">Comment: "An unforgettable stay with breathtaking views and top-notch amenities. Highly recommend for a peaceful retreat!"</p>
+                <p class="review-date text-muted">Reviewed on: 12 Feb 2024</p>
+            </div>
+        </div>
+        <div class="review card mb-3">
+            <div class="card-header">
+                <h2 class="h5">Jane Smith</h2>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">Review for: The Italian Satellite</h3>
+                <p class="card-text">Rating: 5/5</p>
+                <p class="card-text">Comment: "Perfect location, beautiful interiors, and exceptional service. Made our visit to the city even more special!"</p>
+                <p class="review-date text-muted">Reviewed on: 8 Feb 2024</p>
+            </div>
+        </div>
+    </div>
+</section> *@
